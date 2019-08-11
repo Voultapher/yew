@@ -193,7 +193,7 @@ and including it directly into the `html!` template:
 html! {
     <nav class="menu">
         <MyButton title="First Button" />
-        <MyButton title="Second Button "/>
+        <MyButton title="Second Button" />
     </nav>
 }
 ```

@@ -134,7 +134,7 @@ impl Renderable<Model> for Model {
                     </section>
                     <footer class="footer">
                         <span class="todo-count">
-                            <strong>{ self.state.total() }</strong>
+                            <strong>{ self.state.total_completed() }</strong>
                             { " item(s) left" }
                         </span>
                         <ul class="filters">
@@ -236,9 +236,9 @@ pub enum Filter {
 impl<'a> Into<Href> for &'a Filter {
     fn into(self) -> Href {
         match *self {
-            Filter::All => "#/".into(),
-            Filter::Active => "#/active".into(),
-            Filter::Completed => "#/completed".into(),
+            Filter::All => "/".into(),
+            Filter::Active => "/active".into(),
+            Filter::Completed => "/completed".into(),
         }
     }
 }

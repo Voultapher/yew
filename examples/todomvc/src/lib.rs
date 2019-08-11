@@ -110,6 +110,7 @@ impl Component for Model {
             Msg::ClearCompleted => {
                 self.state.clear_completed();
             }
+            // TODO return false, no need to store or update
             Msg::Nope => {}
         }
         self.storage.store(KEY, Json(&self.state.entries));
@@ -127,6 +128,7 @@ impl Renderable<Model> for Model {
                         { self.view_input() }
                     </header>
                     <section class="main">
+                        // FIXME why does toggle-all not show up?
                         <input class="toggle-all" type="checkbox" checked=self.state.is_all_completed() onclick=|_| Msg::ToggleAll />
                         <ul class="todo-list">
                             { for self.state.entries.iter().filter(|e| self.state.filter.fit(e)).enumerate().map(view_entry) }
@@ -233,6 +235,7 @@ pub enum Filter {
     Completed,
 }
 
+// TODO revisit once filter is copy
 impl<'a> Into<Href> for &'a Filter {
     fn into(self) -> Href {
         match *self {
@@ -290,7 +293,7 @@ impl State {
     fn clear_completed(&mut self) {
         let entries = self
             .entries
-            .drain(..)
+            .drain(..) // why drain and not iter? overwrite twice?
             .filter(|e| Filter::Active.fit(e))
             .collect();
         self.entries = entries;
@@ -308,6 +311,8 @@ impl State {
     }
 
     fn toggle_edit(&mut self, idx: usize) {
+        // TODO investigate stable idx and not filter active idx.
+
         let filter = self.filter.clone();
         let mut entries = self
             .entries
